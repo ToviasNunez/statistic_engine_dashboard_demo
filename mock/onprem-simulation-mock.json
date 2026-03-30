@@ -8,6 +8,8 @@
   },
   "daily_compute_costs": [10, 11, 12, 13, 14, 15, 16],
   "daily_storage_costs": [7, 8, 9, 10, 11, 12, 13],
+  "daily_energy_costs": [2, 2, 2, 2, 2, 2, 2],
+  "daily_depreciation_costs": [1, 1, 1, 1, 1, 1, 1],
   "daily_transfer_costs": [1, 1, 2, 2, 3, 3, 4],
   "dates": [
     "2024-03-01",
