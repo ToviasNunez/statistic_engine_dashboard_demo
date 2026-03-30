@@ -12,7 +12,7 @@ export const useGenotypeBenchmark = ({ limit = 100, page = 0, autoRefresh = fals
     setLoading(true);
 
     axios
-      .get(`${API_BASE_URL}/api/genotype-benchmark-daily/paginated`, {
+      .get(`${API_BASE_URL}/mock/genotype-benchmark-table-mock.json`, {
         params: { page, limit },
       })
       .then((res) => {

@@ -1,0 +1,75 @@
+{
+  "items": [
+    {
+      "genotype_set_id": "10001",
+      "file_size_kb": 20480,
+      "download_time_sec": 12.5,
+      "created_at": "2026-03-21T10:15:00Z",
+      "source": "AWS"
+    },
+    {
+      "genotype_set_id": "10002",
+      "file_size_kb": 15360,
+      "download_time_sec": 10.2,
+      "created_at": "2026-03-21T11:00:00Z",
+      "source": "Databricks"
+    },
+    {
+      "genotype_set_id": "10003",
+      "file_size_kb": 30720,
+      "download_time_sec": 18.7,
+      "created_at": "2026-03-21T11:45:00Z",
+      "source": "OnPrem"
+    },
+    {
+      "genotype_set_id": "10004",
+      "file_size_kb": 25600,
+      "download_time_sec": 15.3,
+      "created_at": "2026-03-21T12:30:00Z",
+      "source": "Hybrid"
+    },
+    {
+      "genotype_set_id": "10005",
+      "file_size_kb": 40960,
+      "download_time_sec": 22.1,
+      "created_at": "2026-03-21T13:15:00Z",
+      "source": "AWS"
+    },
+    {
+      "genotype_set_id": "10006",
+      "file_size_kb": 10240,
+      "download_time_sec": 8.9,
+      "created_at": "2026-03-21T14:00:00Z",
+      "source": "Databricks"
+    },
+    {
+      "genotype_set_id": "10007",
+      "file_size_kb": 5120,
+      "download_time_sec": 5.7,
+      "created_at": "2026-03-21T14:45:00Z",
+      "source": "OnPrem"
+    },
+    {
+      "genotype_set_id": "10008",
+      "file_size_kb": 35840,
+      "download_time_sec": 19.8,
+      "created_at": "2026-03-21T15:30:00Z",
+      "source": "Hybrid"
+    },
+    {
+      "genotype_set_id": "10009",
+      "file_size_kb": 20480,
+      "download_time_sec": 12.0,
+      "created_at": "2026-03-21T16:15:00Z",
+      "source": "AWS"
+    },
+    {
+      "genotype_set_id": "10010",
+      "file_size_kb": 30720,
+      "download_time_sec": 17.4,
+      "created_at": "2026-03-21T17:00:00Z",
+      "source": "Databricks"
+    }
+  ],
+  "totalCount": 10
+}

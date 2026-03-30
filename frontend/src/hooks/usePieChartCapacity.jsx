@@ -9,7 +9,7 @@ export default function usePieChartCapacity() {
 
   const triggerRefresh = useCallback(() => {
     setLoading(true);
-    axios.get(`${API_BASE_URL}/api/genotype-usage`)
+    axios.get(`${API_BASE_URL}/mock/piechart-capacity-mock.json`)
       .then(res => {
         console.log("✅ usePieChart:", res.data);
         const dbUsage = res.data; // <-- direkt das Root-Objekt nehmen

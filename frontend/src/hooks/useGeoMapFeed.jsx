@@ -1,17 +1,112 @@
-import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-const liveRefreshIntervalMs = 5000;
-const websocketReconnectDelayMs = 3000;
-const websocketHeartbeatIntervalMs = 20000;
-const liveBootstrapEventLimit = 400;
-const liveEventBufferSize = 600;
-const liveValidationRequestLimit = 60;
+const STEP_DELAY_MS = 5000;
+const NEXT_RUN_DELAY_MS = 3000;
+const EVENT_BUFFER_SIZE = 300;
+const VALIDATION_BUFFER_SIZE = 60;
 
-const trackingApiBaseUrl = (import.meta.env.VITE_TRACKING_API_URL ?? 'http://localhost:8124');
-const trackingWebsocketBaseUrl = trackingApiBaseUrl.startsWith('https://')
-  ? trackingApiBaseUrl.replace('https://', 'wss://')
-  : trackingApiBaseUrl.replace('http://', 'ws://');
+const STORAGE_KEYS = {
+  events: 'demo_tracking_events',
+  validations: 'demo_tracking_validations',
+};
+
+const PROCESS_STEPS = [
+  {
+    step: 'etl-inject',
+    source: 'incoming',
+    target: 'etl-inject',
+    message: 'Incoming dataset started injection',
+    sizeMultiplier: 1.0,
+    route: ['einbeck', 'inject', 'postgresql'],
+  },
+  {
+    step: 'rabbitmq-notify-export',
+    source: 'etl-inject',
+    target: 'rabbitmq',
+    message: 'Inject notified RabbitMQ',
+    sizeMultiplier: 1.0,
+    route: ['inject', 'rabbitmq'],
+  },
+  {
+    step: 'rabbitmq-trigger-export',
+    source: 'rabbitmq',
+    target: 'etl-export',
+    message: 'RabbitMQ triggered export',
+    sizeMultiplier: 1.0,
+    route: ['rabbitmq', 'exporter'],
+  },
+  {
+    step: 'etl-export',
+    source: 'postgresql',
+    target: 'minio',
+    message: 'Exporting dataset to MinIO',
+    sizeMultiplier: 0.92,
+    route: ['postgresql', 'exporter', 'minio'],
+  },
+  {
+    step: 'rabbitmq-notify-register',
+    source: 'etl-export',
+    target: 'rabbitmq',
+    message: 'Export notified RabbitMQ',
+    sizeMultiplier: 0.92,
+    route: ['exporter', 'rabbitmq'],
+  },
+  {
+    step: 'rabbitmq-trigger-register',
+    source: 'rabbitmq',
+    target: 'etl-register',
+    message: 'RabbitMQ triggered register',
+    sizeMultiplier: 0.92,
+    route: ['rabbitmq', 'register'],
+  },
+  {
+    step: 'etl-register',
+    source: 'minio',
+    target: 'iceberg',
+    message: 'Registering dataset in Iceberg',
+    sizeMultiplier: 0.92,
+    route: ['minio', 'register', 'iceberg'],
+  },
+  {
+    step: 'trino-query-start',
+    source: 'iceberg',
+    target: 'trino',
+    message: 'Trino query started',
+    sizeMultiplier: 0.1,
+    route: ['iceberg', 'trino'],
+  },
+  {
+    step: 'trino-query-finish',
+    source: 'trino',
+    target: 'dashboard',
+    message: 'Dashboard received results',
+    sizeMultiplier: 0.02,
+    route: ['trino', 'dashboard'],
+  },
+];
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+function readStorage(key, fallback) {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStorage(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // ignore demo storage issues
+  }
+}
 
 function eventKey(event) {
   return [
@@ -37,7 +132,7 @@ function mergeEvents(currentEvents, nextEvents) {
 
   return Array.from(merged.values())
     .sort((left, right) => new Date(left.timestamp).getTime() - new Date(right.timestamp).getTime())
-    .slice(-liveEventBufferSize);
+    .slice(-EVENT_BUFFER_SIZE);
 }
 
 function mergeValidationRequests(currentRecords, nextRecords) {
@@ -51,91 +146,26 @@ function mergeValidationRequests(currentRecords, nextRecords) {
     merged.set(record.request_id, record);
   }
 
-  return Array.from(merged.values()).sort(
-    (left, right) => new Date(right.checked_at).getTime() - new Date(left.checked_at).getTime(),
-  );
-}
-
-function resolveStationId(rawStationId) {
-  if (rawStationId === 'incoming') {
-    return 'einbeck';
-  }
-
-  if (rawStationId === 'etl-inject') {
-    return 'inject';
-  }
-
-  if (rawStationId === 'etl-export') {
-    return 'exporter';
-  }
-
-  if (rawStationId === 'etl-register') {
-    return 'register';
-  }
-
-  if (rawStationId === 'trino') {
-    return 'trino';
-  }
-
-  if (rawStationId === 'dashboard') {
-    return 'dashboard';
-  }
-
-  return rawStationId;
-}
-
-function buildEventRoute(event) {
-  if (!event) {
-    return [];
-  }
-
-  if (event.step === 'rabbitmq-notify-export') {
-    return ['inject', 'rabbitmq'];
-  }
-
-  if (event.step === 'rabbitmq-trigger-export') {
-    return ['rabbitmq', 'exporter'];
-  }
-
-  if (event.step === 'rabbitmq-notify-register') {
-    return ['exporter', 'rabbitmq'];
-  }
-
-  if (event.step === 'rabbitmq-trigger-register') {
-    return ['rabbitmq', 'register'];
-  }
-
-  if (event.step === 'etl-inject') {
-    return ['einbeck', 'inject', 'postgresql'];
-  }
-
-  if (event.step === 'etl-export') {
-    return ['postgresql', 'exporter', 'minio'];
-  }
-
-  if (event.step === 'etl-register') {
-    return ['minio', 'register', 'iceberg'];
-  }
-
-  if (event.step.startsWith('trino')) {
-    return ['iceberg', 'trino', 'dashboard'];
-  }
-
-  return [event.source, event.step, event.target]
-    .map((stationId) => resolveStationId(stationId))
-    .filter((stationId, index, list) => Boolean(stationId) && list.indexOf(stationId) === index);
+  return Array.from(merged.values())
+    .sort((left, right) => new Date(right.checked_at).getTime() - new Date(left.checked_at).getTime())
+    .slice(0, VALIDATION_BUFFER_SIZE);
 }
 
 function normalizeTrackingEvent(event, index) {
+  const rawId = String(event.tracking_id ?? '');
+  const numbersOnly = rawId.replace(/\D/g, ''); // quita todo menos números
+  const shortTrackingId = numbersOnly.slice(-4); // últimos 4 números // 👈 últimos 4
+
   return {
     id: `${event.tracking_id}-${event.step}-${event.timestamp}-${index}`,
     timestamp: event.timestamp,
-    trackingId: event.tracking_id,
+    trackingId: shortTrackingId,
+    fullTrackingId: event.tracking_id,
     datasetId: event.dataset_id,
     label: event.message || event.step,
     payload: event.size_bytes ? `${Math.round(event.size_bytes / 1024)} KB` : 'live',
-    route: buildEventRoute(event),
-    kind: event.step.startsWith('trino') ? 'analytics' : 'ingest',
+    route: event.route ?? [],
+    kind: String(event.step ?? '').startsWith('trino') ? 'analytics' : 'ingest',
     status: event.status,
     step: event.step,
     source: event.source,
@@ -145,146 +175,197 @@ function normalizeTrackingEvent(event, index) {
 }
 
 function findValidationForEvent(event, validationRequests) {
-  if (!event) {
-    return null;
-  }
+  if (!event) return null;
 
-  return validationRequests.find((record) => (
-    record.tracking_id === event.tracking_id && record.dataset_id === event.dataset_id
-  )) ?? null;
+  return validationRequests.find(
+    (record) =>
+      record.tracking_id === event.fullTrackingId &&
+      record.dataset_id === event.datasetId,
+  ) ?? null;
+}
+
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function createTrackingRun() {
+  const now = Date.now();
+  const trackingId = `thread-${now}-${Math.random().toString(36).slice(2, 7)}`;
+  const datasetId = `dataset-${new Date(now).toISOString().slice(0, 10)}-${randomBetween(100, 999)}`;
+  const baseSizeBytes = randomBetween(120 * 1024 * 1024, 900 * 1024 * 1024);
+
+  return {
+    tracking_id: trackingId,
+    dataset_id: datasetId,
+    started_at: new Date(now).toISOString(),
+    size_bytes: baseSizeBytes,
+  };
+}
+
+function createEvent(run, stepConfig, status = 'processing') {
+  return {
+    tracking_id: run.tracking_id,
+    dataset_id: run.dataset_id,
+    step: stepConfig.step,
+    timestamp: new Date().toISOString(),
+    status,
+    source: stepConfig.source,
+    target: stepConfig.target,
+    message: stepConfig.message,
+    size_bytes: Math.round(run.size_bytes * stepConfig.sizeMultiplier),
+    route: stepConfig.route,
+  };
+}
+
+function createValidationRecord(run) {
+  const passed = Math.random() > 0.08;
+
+  return {
+    request_id: `val-${run.tracking_id}`,
+    tracking_id: run.tracking_id,
+    dataset_id: run.dataset_id,
+    checked_at: new Date().toISOString(),
+    status: passed ? 'passed' : 'warning',
+    message: passed
+      ? 'Validation completed successfully'
+      : 'Validation completed with minor schema warning',
+    rule_count: randomBetween(4, 12),
+  };
 }
 
 export function useGeoMapFeed() {
-  const [liveEvents, setLiveEvents] = useState([]);
-  const [validationRequests, setValidationRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [liveEvents, setLiveEvents] = useState(() => readStorage(STORAGE_KEYS.events, []));
+  const [validationRequests, setValidationRequests] = useState(() => readStorage(STORAGE_KEYS.validations, []));
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [activeThread, setActiveThread] = useState(null);
+  const [activeStep, setActiveStep] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const latestTimestampRef = useRef(null);
 
-  const refreshValidationRequests = useCallback(async () => {
-    const response = await axios.get(`${trackingApiBaseUrl}/tracking/validation/requests`, {
-      params: { limit: liveValidationRequestLimit },
+  const cancelledRef = useRef(false);
+
+  const persistEvents = useCallback((updater) => {
+    setLiveEvents((current) => {
+      const next = typeof updater === 'function' ? updater(current) : updater;
+      writeStorage(STORAGE_KEYS.events, next);
+      return next;
     });
+  }, []);
 
-    setValidationRequests((current) => mergeValidationRequests(current, response.data));
+  const persistValidations = useCallback((updater) => {
+    setValidationRequests((current) => {
+      const next = typeof updater === 'function' ? updater(current) : updater;
+      writeStorage(STORAGE_KEYS.validations, next);
+      return next;
+    });
   }, []);
 
   const triggerRefresh = useCallback(async () => {
     setLoading(true);
-
     try {
-      const response = await axios.get(`${trackingApiBaseUrl}/tracking/events`, {
-        params: latestTimestampRef.current
-          ? { since: latestTimestampRef.current }
-          : { limit: liveBootstrapEventLimit },
-      });
-
-      const payload = Array.isArray(response.data) ? response.data : [];
-      await refreshValidationRequests();
-      setLiveEvents((current) => mergeEvents(current, payload));
-
-      if (payload.length > 0) {
-        latestTimestampRef.current = payload[payload.length - 1].timestamp;
-      }
-
+      const storedEvents = readStorage(STORAGE_KEYS.events, []);
+      const storedValidations = readStorage(STORAGE_KEYS.validations, []);
+      setLiveEvents(storedEvents);
+      setValidationRequests(storedValidations);
+      setCurrentEvent(storedEvents[storedEvents.length - 1] ?? null);
       setError(null);
-    } catch (fetchError) {
-      console.error('❌ useGeoMapFeed failed against tracking-app backend:', fetchError);
-      setError(fetchError.message);
+    } catch (refreshError) {
+      setError(refreshError.message || 'Refresh failed');
     } finally {
       setLoading(false);
     }
-  }, [refreshValidationRequests]);
+  }, []);
 
-  useEffect(() => {
-    triggerRefresh();
-    const intervalId = window.setInterval(triggerRefresh, liveRefreshIntervalMs);
+  const runSingleThread = useCallback(async () => {
+    const run = createTrackingRun();
 
-    return () => window.clearInterval(intervalId);
-  }, [triggerRefresh]);
+    setActiveThread(run);
+    setActiveStep(PROCESS_STEPS[0]?.step ?? null);
 
-  useEffect(() => {
-    let isCancelled = false;
-    let socket = null;
-    let reconnectTimerId = null;
-    let heartbeatTimerId = null;
-
-    const clearTimers = () => {
-      if (reconnectTimerId !== null) {
-        window.clearTimeout(reconnectTimerId);
-        reconnectTimerId = null;
-      }
-
-      if (heartbeatTimerId !== null) {
-        window.clearInterval(heartbeatTimerId);
-        heartbeatTimerId = null;
-      }
-    };
-
-    const connect = () => {
-      if (isCancelled) {
+    for (const stepConfig of PROCESS_STEPS) {
+      if (cancelledRef.current) {
         return;
       }
 
-      socket = new WebSocket(`${trackingWebsocketBaseUrl}/tracking/live`);
+      const processingEvent = createEvent(run, stepConfig, 'processing');
 
-      socket.onopen = () => {
-        heartbeatTimerId = window.setInterval(() => {
-          if (socket?.readyState === WebSocket.OPEN) {
-            socket.send('ping');
-          }
-        }, websocketHeartbeatIntervalMs);
-      };
+      setCurrentEvent(processingEvent);
+      setActiveStep(stepConfig.step);
+      persistEvents((current) => mergeEvents(current, [processingEvent]));
 
-      socket.onmessage = (messageEvent) => {
-        const payload = JSON.parse(messageEvent.data);
-        latestTimestampRef.current = payload.timestamp;
-        setLiveEvents((current) => mergeEvents(current, [payload]));
+      console.log(
+        '[THREAD]',
+        run.tracking_id,
+        '| status: processing',
+        '| step:',
+        stepConfig.step,
+        '| route:',
+        stepConfig.route.join(' -> ')
+      );
 
-        if (payload.step === 'etl-register' && payload.status === 'completed') {
-          void refreshValidationRequests().catch((refreshError) => {
-            setError(refreshError.message);
-          });
+      await sleep(STEP_DELAY_MS);
+
+      if (cancelledRef.current) {
+        return;
+      }
+
+      const completedEvent = createEvent(run, stepConfig, 'completed');
+
+      setCurrentEvent(completedEvent);
+      persistEvents((current) => mergeEvents(current, [completedEvent]));
+
+      if (stepConfig.step === 'etl-register') {
+        const validation = createValidationRecord(run);
+        persistValidations((current) => mergeValidationRequests(current, [validation]));
+      }
+    }
+
+    if (!cancelledRef.current) {
+      await sleep(NEXT_RUN_DELAY_MS);
+    }
+  }, [persistEvents, persistValidations]);
+
+  useEffect(() => {
+    cancelledRef.current = false;
+
+    const startLoop = async () => {
+      await triggerRefresh();
+
+      while (!cancelledRef.current) {
+        try {
+          await runSingleThread();
+        } catch (loopError) {
+          console.error('❌ simulation loop failed:', loopError);
+          setError(loopError.message || 'Simulation loop failed');
+          await sleep(2000);
         }
-      };
-
-      socket.onerror = () => {
-        if (!isCancelled) {
-          setError('Tracking-app live socket failed');
-        }
-      };
-
-      socket.onclose = () => {
-        clearTimers();
-
-        if (isCancelled) {
-          return;
-        }
-
-        reconnectTimerId = window.setTimeout(connect, websocketReconnectDelayMs);
-      };
+      }
     };
 
-    connect();
+    void startLoop();
 
     return () => {
-      isCancelled = true;
-      clearTimers();
-      socket?.close();
+      cancelledRef.current = true;
     };
-  }, [refreshValidationRequests]);
+  }, [runSingleThread, triggerRefresh]);
 
   const recentEvents = useMemo(() => {
     return liveEvents.map((event, index) => normalizeTrackingEvent(event, index));
   }, [liveEvents]);
 
-  const currentTrackingEvent = liveEvents[liveEvents.length - 1] ?? null;
-  const currentValidation = findValidationForEvent(currentTrackingEvent, validationRequests);
+  const normalizedCurrentEvent = useMemo(() => {
+    if (!currentEvent) return null;
+    return normalizeTrackingEvent(currentEvent, 0);
+  }, [currentEvent]);
+
+  const currentValidation = findValidationForEvent(currentEvent, validationRequests);
 
   return {
     recentEvents,
-    currentEvent: recentEvents[recentEvents.length - 1] ?? null,
+    currentEvent: normalizedCurrentEvent,
     currentValidation,
+    activeThread,
+    activeStep,
     loading,
     error,
     triggerRefresh,

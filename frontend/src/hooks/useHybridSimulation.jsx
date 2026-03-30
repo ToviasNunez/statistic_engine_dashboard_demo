@@ -126,7 +126,7 @@ export default function useHybridSimulation({
     }
     console.log("Equalizer sent to backend (Hybrid):", equalizerValues);
     axios
-      .get(`${API_BASE_URL}/api/simulation-stats/hybrid`, {
+      .get(`${API_BASE_URL}/mock/hybrid-simulation-mock.json`, {
         params
       })
       .then((res) => {

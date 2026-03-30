@@ -179,10 +179,11 @@ export default function GeoMap({ currentEvent = null, currentValidation = null, 
   const [tooltip, setTooltip] = useState({ show: false, content: "", x: 0, y: 0 });
 
   const normalizedEvents = useMemo(() => {
-    if (Array.isArray(recentEvents) && recentEvents.length > 0) return recentEvents;
-    if (currentEvent) return [currentEvent];
-    return buildFallbackEvents();
-  }, [currentEvent, recentEvents]);
+  if (isLiveMode && currentEvent) return [currentEvent];
+  if (Array.isArray(recentEvents) && recentEvents.length > 0) return recentEvents;
+  if (currentEvent) return [currentEvent];
+  return buildFallbackEvents();
+}, [currentEvent, recentEvents, isLiveMode]);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setTick(Date.now()), 40);

@@ -31,7 +31,7 @@ export const useGenotypeBenchmarkRange = ({ startDate, endDate, sourceType, auto
     if (sourceType) params.sourceType = sourceType;
     console.log('[useGenotypeBenchmarkRange] Request params:', params);
     axios
-            .get(`${API_BASE_URL}/api/genotype-benchmark-daily/range`, {
+            .get(`${API_BASE_URL}/mock/genotype-benchmark-table-mock.json`, {
         params,
       })
       .then((res) => {

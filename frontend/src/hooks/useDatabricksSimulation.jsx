@@ -118,7 +118,7 @@ export default function useDatabricksSimulation({
         console.log("Equalizer sent to backend (Databricks):", equalizerValues);
 
     axios
-      .get(`${API_BASE_URL}/api/simulation-stats/databricks`, {
+      .get(`${API_BASE_URL}/mock/databricks-simulation-mock.json`, {
         params
       })
       .then((res) => {

@@ -122,7 +122,7 @@ export default function useOnPremSimulation({
     }
     console.log("Equalizer sent to backend (OnPrem):", equalizerValues);
     axios
-      .get(`${API_BASE_URL}/api/simulation-stats/onprem`, {
+      .get(`${API_BASE_URL}/mock/onprem-simulation-mock.json`, {
         params,
       })
       .then((res) => {

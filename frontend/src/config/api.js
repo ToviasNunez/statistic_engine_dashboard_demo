@@ -3,8 +3,8 @@
 // In Docker setup, both frontend and backend are exposed on localhost with different ports
 const getBaseURL = () => {
   // Since frontend JavaScript runs in browser, always use localhost
-  // Backend is accessible via localhost:8080 from the browser's perspective
-  return "http://localhost:8080";
+  // Backend is accessible viafrom the browser's perspective
+  return "http://localhost:3002";
 };
 
 export const API_BASE_URL = getBaseURL();

@@ -119,8 +119,10 @@ export default function useAWSSimulation({
       params.equalizer = JSON.stringify(equalizerValues);
     }
     console.log("Equalizer sent to backend: (AWS)", equalizerValues);
+    // Wenn API_BASE_URL explizit 'mock' ist, lade Mockdaten aus dem Projekt
+    const url =  `${API_BASE_URL}/mock/aws-simulation-mock.json`;
     axios
-      .get(`${API_BASE_URL}/api/simulation-stats/aws`, {
+      .get(url, {
         params
       })
       .then((res) => {

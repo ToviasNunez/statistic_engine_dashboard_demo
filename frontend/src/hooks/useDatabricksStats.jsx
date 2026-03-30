@@ -14,7 +14,7 @@ export const useDatabricksStats = ({ limit = 100, page = 0 } = {}) => {
     setLoading(true);
     
     // Fetch from backend Databricks endpoint
-    axios.get(`${API_BASE_URL}/api/genotype-databricks/range`, {
+    axios.get(`${API_BASE_URL}/mock/databricks-stats-mock.json`, {
       params: {
         startDate: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Last year
         endDate: new Date().toISOString().split('T')[0]

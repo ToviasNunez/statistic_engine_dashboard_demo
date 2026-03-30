@@ -32,7 +32,7 @@ export default function Dashboard() {
   };
   const today = new Date();
   const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(today.getDate() - (365));
+  sevenDaysAgo.setDate(today.getDate() - 7);
   const [mode, setMode] = useState("real"); // Use generic 'real' instead of 'databricks'
   const currentModeRef = useRef(mode);
   const [startDate, setStartDate] = useState(sevenDaysAgo);

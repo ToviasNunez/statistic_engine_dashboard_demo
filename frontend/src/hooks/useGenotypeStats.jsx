@@ -11,7 +11,7 @@ export const useGenotypeStats = ({ limit = 100, page = 0, autoRefresh = false } 
   const fetchPage = useCallback(() => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/api/genotype-stats/paginated`, {
+      .get(`${API_BASE_URL}/mock/genotype-stats-mock.json`, {
         params: { page, limit },
       })
       .then((res) => {

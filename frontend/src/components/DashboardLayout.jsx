@@ -64,7 +64,7 @@ export default function DashboardLayout({
   // Equalizer-Logik entfernt – StartCard verwendet nur Backend-Werte
   const [tableType, setTableType] = useState('benchmark'); // 'benchmark' or 'stats'
   // Standardmäßig Hybrid vorausgewählt
-  const [selectedArchs, setSelectedArchs] = useState(["hybrid"]); // Allow multiple architectures
+  const [selectedArchs, setSelectedArchs] = useState([""]); // Allow multiple architectures
   const [barTimeRange, setBarTimeRange] = useState("year");
   
     // 🎯 Dynamic Simulation Configurations - Using REAL simulator data

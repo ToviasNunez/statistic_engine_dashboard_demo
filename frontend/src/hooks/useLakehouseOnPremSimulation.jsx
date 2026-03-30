@@ -146,7 +146,7 @@ export default function useLakehouseOnPremSimulation({
   console.log("Equalizer sent to backend (LakehouseOnPrem):", equalizerValues);
 
     axios
-      .get(`${API_BASE_URL}/api/simulation-stats/lakehouse_onprem`, { params })
+      .get(`${API_BASE_URL}/mock/lakehouse-onprem-simulation-mock.json`, { params })
       .then((response) => {
         const data = response.data;
         lastKeyRef.current = cacheKey;

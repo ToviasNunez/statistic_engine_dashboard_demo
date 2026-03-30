@@ -19,6 +19,14 @@ export default function BarChartCost({
   mode = "real",      // "real" or "prediction"
   loading = false,
 }) {
+  // MOCKDATA: Direkt in der Komponente
+  const mockData = [
+    { architecture: "On-Premise", total_cost: 1200.50, source_type: "real" },
+    { architecture: "AWS", total_cost: 950.75, source_type: "real" },
+    { architecture: "Hybrid_Lakehouse", total_cost: 1100.00, source_type: "real" },
+    { architecture: "Databricks", total_cost: 1350.20, source_type: "real" },
+    { architecture: "Lakehouse OnPrem", total_cost: 800.00, source_type: "real" }
+  ];
 
   // Normalize mode to match DB values ("real" or "prediction")
   const modeLower = (mode || "real").toLowerCase();
@@ -27,7 +35,8 @@ export default function BarChartCost({
     ? new Set(["prediction", "predicted"])
     : new Set(["real"]);
   // Filter records by source_type
-  const records = (Array.isArray(benchmarkData) ? benchmarkData : []).filter(
+  // Nutze mockData statt benchmarkData
+  const records = mockData.filter(
     (row) => {
       const src = (row.source_type || row.sourceType || '').toString().toLowerCase();
       return allowedSourceTypes.has(src);
