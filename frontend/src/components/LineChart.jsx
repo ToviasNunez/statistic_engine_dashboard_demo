@@ -23,10 +23,22 @@ export default function LineChart({
   selectedArchs,
 }) {
   // Dynamisch: Sammle alle numerischen Array-Keys aus allen Simulationen
+  // Für jede Architektur: Zeige immer mindestens einen Graphen (Priorität: computeData > storageData > s3Data > egressData > energyData)
   let allValueKeys = new Set();
+  const preferredKeys = ["computeData", "storageData", "s3Data", "egressData", "energyData", "transferData", "sqlData", "lambdaData", "athenaData", "depreciationData"];
   selectedArchs.forEach(arch => {
     const card = cards[arch];
     if (card) {
+      // Füge bevorzugte Keys zuerst hinzu, falls vorhanden
+      let found = false;
+      for (const key of preferredKeys) {
+        if (Array.isArray(card[key]) && card[key].length > 0 && card[key].every(v => typeof v === 'number' && isFinite(v))) {
+          allValueKeys.add(key);
+          found = true;
+          break;
+        }
+      }
+      // Füge alle weiteren numerischen Arrays hinzu
       Object.keys(card).forEach(key => {
         if (
           Array.isArray(card[key]) &&
@@ -41,6 +53,14 @@ export default function LineChart({
   // Für Hybrid/Lakehouse: auch OnPrem-Keys einbeziehen
   if (selectedArchs.includes('hybrid') || selectedArchs.includes('lakehouse_onprem')) {
     if (cards['onprem']) {
+      let found = false;
+      for (const key of preferredKeys) {
+        if (Array.isArray(cards['onprem'][key]) && cards['onprem'][key].length > 0 && cards['onprem'][key].every(v => typeof v === 'number' && isFinite(v))) {
+          allValueKeys.add(key);
+          found = true;
+          break;
+        }
+      }
       Object.keys(cards['onprem']).forEach(key => {
         if (
           Array.isArray(cards['onprem'][key]) &&

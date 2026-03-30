@@ -63,8 +63,8 @@ export default function DashboardLayout({
   // Dummy-Implementierung, damit die Komponente funktioniert
   // Equalizer-Logik entfernt – StartCard verwendet nur Backend-Werte
   const [tableType, setTableType] = useState('benchmark'); // 'benchmark' or 'stats'
-  // Standardmäßig Hybrid vorausgewählt
-  const [selectedArchs, setSelectedArchs] = useState([""]); // Allow multiple architectures
+  // Standardmäßig Hybrid vorausgewählt (kein leerer String!)
+  const [selectedArchs, setSelectedArchs] = useState(["hybrid"]); // Allow multiple architectures
   const [barTimeRange, setBarTimeRange] = useState("year");
   
     // 🎯 Dynamic Simulation Configurations - Using REAL simulator data
@@ -132,9 +132,8 @@ export default function DashboardLayout({
     }
   });
 
-  // Ensure AWS is always selected if no architecture is selected
-  // Wenn keine Architektur gewählt, Hybrid als Fallback
-  const effectiveSelectedArchs = selectedArchs.length > 0 ? selectedArchs : ["hybrid"];
+  // Immer mindestens eine Architektur aktiv (Fallback: Hybrid)
+  const effectiveSelectedArchs = selectedArchs && selectedArchs.length > 0 ? selectedArchs : ["hybrid"];
   
     // 🎯 REAL SIMULATOR DATA Debug Logs
   console.log("🏭 REAL SIMULATOR DATA from backend:");
@@ -300,12 +299,8 @@ export default function DashboardLayout({
           {/* Selector List */}
           <div className="lg:col-span-1 flex flex-col gap-6 h-full w-full order-2 lg:order-1">
             <ArchitecturList
-              selectedArchs={selectedArchs} // Pass array of selected architectures
-              setSelectedArchs={setSelectedArchs} // Setter function
-              currentMode={mode}
-              // 🎯 Pass dynamic simulation configs for architecture selection
-              availableSimulations={processedSimulations}
-              // Keine Equalizer-Props mehr
+              selectedArchs={selectedArchs}
+              setSelectedArchs={setSelectedArchs}
             />
             <div className="bg-card-white text-text-dark rounded-2xl shadow-enterprise-lg border border-gray-100 p-6 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-4">
@@ -329,19 +324,17 @@ export default function DashboardLayout({
 
           {/* LineChart */}
           <div className="lg:col-span-2 flex flex-col gap-6 sm:gap-8 h-full order-1 lg:order-2">
+            {/* Debug: Welche Architekturen und Karten werden an LineChart übergeben? */}
+            {console.log("LineChart: selectedArchs=", effectiveSelectedArchs, "cards=", cards)}
             <LineChart
-              cards={cards} // Legacy compatibility
-              processedSimulations={processedSimulations} // 🎯 New dynamic data
+              cards={cards}
               stats={stats}
               dates={[startDate, endDate]}
               startDate={startDate}
               endDate={endDate}
-              loading={
-                processedSimulations.some(sim => sim.loading) // Dynamic loading check
-              }
-              selectedArchs={effectiveSelectedArchs} // Use effectiveSelectedArchs
+              loading={processedSimulations.some(sim => sim.loading)}
+              selectedArchs={effectiveSelectedArchs}
               currentMode={mode}
-              // Keine Equalizer-Props mehr
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 w-full auto-rows-fr">
