@@ -1,0 +1,48 @@
+/* Enhanced StartCard Styling for 5-Card Layout */
+
+/* Ensure consistent card sizing across the grid */
+.start-card-container {
+  @apply w-full;
+  min-width: 220px; /* Minimum width for readability */
+  max-width: 320px; /* Maximum width to prevent cards from becoming too wide */
+}
+
+/* Responsive adjustments for 5-card layout */
+@media (min-width: 1024px) {
+  .kpi-cards-grid {
+    @apply grid-cols-5;
+  }
+  
+  .kpi-cards-grid > * {
+    flex: 1;
+    min-width: 200px;
+    max-width: 240px;
+  }
+}
+
+/* Enhanced hover effects for better UX */
+.start-card-hover {
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:shadow-xl hover:scale-105 hover:-translate-y-1;
+}
+
+/* Improved gradient backgrounds for different architectures */
+.card-onprem {
+  background: linear-gradient(135deg, #FFF8DC 0%, #F5E6D3 100%);
+}
+
+.card-aws {
+  background: linear-gradient(135deg, #FFF4E6 0%, #FFE4B5 100%);
+}
+
+.card-hybrid {
+  background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
+}
+
+.card-databricks {
+  background: linear-gradient(135deg, #F0FFF0 0%, #E6FFE6 100%);
+}
+
+.card-lakehouse {
+  background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
+}
