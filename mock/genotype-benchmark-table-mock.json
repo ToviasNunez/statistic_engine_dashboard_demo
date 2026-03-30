@@ -1,0 +1,104 @@
+{
+  "items": [
+    {
+      "genotype_set_id": "10001",
+      "architecture": "x86_64",
+      "total_chunks": 12,
+      "total_size_mb": 4800,
+      "total_download_time_sec": 120.5,
+      "date": "2026-03-21T10:15:00Z",
+      "source": "AWS",
+      "total_cost": 24.50
+    },
+    {
+      "genotype_set_id": "10002",
+      "architecture": "arm64",
+      "total_chunks": 10,
+      "total_size_mb": 3900,
+      "total_download_time_sec": 110.2,
+      "date": "2026-03-21T11:00:00Z",
+      "source": "Databricks",
+      "total_cost": 22.10
+    },
+    {
+      "genotype_set_id": "10003",
+      "architecture": "x86_64",
+      "total_chunks": 8,
+      "total_size_mb": 3200,
+      "total_download_time_sec": 98.7,
+      "date": "2026-03-21T11:45:00Z",
+      "source": "OnPrem",
+      "total_cost": 19.80
+    },
+    {
+      "genotype_set_id": "10004",
+      "architecture": "arm64",
+      "total_chunks": 9,
+      "total_size_mb": 3500,
+      "total_download_time_sec": 105.3,
+      "date": "2026-03-21T12:30:00Z",
+      "source": "Hybrid",
+      "total_cost": 21.00
+    },
+    {
+      "genotype_set_id": "10005",
+      "architecture": "x86_64",
+      "total_chunks": 11,
+      "total_size_mb": 4100,
+      "total_download_time_sec": 115.0,
+      "date": "2026-03-21T13:15:00Z",
+      "source": "AWS",
+      "total_cost": 23.00
+    },
+    {
+      "genotype_set_id": "10006",
+      "architecture": "arm64",
+      "total_chunks": 7,
+      "total_size_mb": 2950,
+      "total_download_time_sec": 90.2,
+      "date": "2026-03-21T14:00:00Z",
+      "source": "Databricks",
+      "total_cost": 18.90
+    },
+    {
+      "genotype_set_id": "10007",
+      "architecture": "x86_64",
+      "total_chunks": 13,
+      "total_size_mb": 5000,
+      "total_download_time_sec": 130.7,
+      "date": "2026-03-21T14:45:00Z",
+      "source": "OnPrem",
+      "total_cost": 26.10
+    },
+    {
+      "genotype_set_id": "10008",
+      "architecture": "arm64",
+      "total_chunks": 10,
+      "total_size_mb": 3600,
+      "total_download_time_sec": 100.8,
+      "date": "2026-03-21T15:30:00Z",
+      "source": "Hybrid",
+      "total_cost": 20.50
+    },
+    {
+      "genotype_set_id": "10009",
+      "architecture": "x86_64",
+      "total_chunks": 12,
+      "total_size_mb": 4200,
+      "total_download_time_sec": 122.0,
+      "date": "2026-03-21T16:15:00Z",
+      "source": "AWS",
+      "total_cost": 24.80
+    },
+    {
+      "genotype_set_id": "10010",
+      "architecture": "arm64",
+      "total_chunks": 9,
+      "total_size_mb": 3400,
+      "total_download_time_sec": 99.4,
+      "date": "2026-03-21T17:00:00Z",
+      "source": "Databricks",
+      "total_cost": 19.70
+    }
+  ]
+}

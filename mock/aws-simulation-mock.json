@@ -1,0 +1,24 @@
+{
+  "name": "AWS",
+  "summary": {
+    "Total (€)": 1234.56,
+    "Compute (€)": 456.78,
+    "Storage (€)": 567.89,
+    "Transfer (€)": 209.89
+  },
+  "daily_athena_costs": [12, 14, 13, 15, 16, 18, 17],
+  "daily_storage_costs": [8, 9, 10, 11, 12, 13, 14],
+  "daily_transfer_costs": [2, 2, 3, 3, 4, 4, 5],
+  "dates": [
+    "2024-03-01",
+    "2024-03-02",
+    "2024-03-03",
+    "2024-03-04",
+    "2024-03-05",
+    "2024-03-06",
+    "2024-03-07"
+  ],
+  "total_size_gb": 512,
+  "total_download_time_sec": 1200,
+  "Time": 1200
+}

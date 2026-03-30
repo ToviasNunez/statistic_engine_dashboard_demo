@@ -1,0 +1,31 @@
+{
+  "name": "Lakehouse OnPrem",
+  "summary": {
+    "Total (€)": 12450.75,
+    "Compute (€)": 4200.00,
+    "Storage (€)": 3200.00,
+    "Energy (€)": 1800.00,
+    "Depreciation (€)": 1500.00,
+    "Lambda (€)": 950.00,
+    "S3 (€)": 500.00,
+    "Athena (€)": 300.75
+  },
+  "daily_storage_costs": [100, 110, 120, 130, 140, 150, 160],
+  "daily_compute_costs": [200, 210, 220, 230, 240, 250, 260],
+  "daily_energy_costs": [50, 52, 54, 56, 58, 60, 62],
+  "daily_depreciation_costs": [40, 41, 42, 43, 44, 45, 46],
+  "daily_lambda_costs": [20, 22, 24, 26, 28, 30, 32],
+  "daily_s3_costs": [10, 12, 14, 16, 18, 20, 22],
+  "daily_athena_costs": [5, 6, 7, 8, 9, 10, 11],
+  "dates": [
+    "2026-03-24",
+    "2026-03-25",
+    "2026-03-26",
+    "2026-03-27",
+    "2026-03-28",
+    "2026-03-29",
+    "2026-03-30"
+  ],
+  "total_size_gb": 5120,
+  "total_download_time_sec": 3600
+}

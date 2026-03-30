@@ -1,0 +1,26 @@
+{
+  "name": "Hybrid",
+  "summary": {
+    "Total (€)": 240,
+    "Compute (€)": 126,
+    "Storage (€)": 91,
+    "Transfer (€)": 23
+  },
+  "daily_storage_cloud_costs": [6, 6.5, 7, 7.5, 8, 8.5, 9],
+  "daily_storage_sql_costs": [4, 4.5, 5, 5.5, 6, 6.5, 7],
+  "daily_storage_costs": [10, 11, 12, 13, 14, 15, 16],
+  "daily_etl_costs": [15, 16, 17, 18, 19, 20, 21],
+  "daily_transfer_costs": [2, 2, 3, 3, 4, 4, 5],
+  "dates": [
+    "2024-03-01",
+    "2024-03-02",
+    "2024-03-03",
+    "2024-03-04",
+    "2024-03-05",
+    "2024-03-06",
+    "2024-03-07"
+  ],
+  "total_size_gb": 768,
+  "total_download_time_sec": 1800,
+  "Time": 1800
+}
