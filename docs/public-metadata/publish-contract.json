@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractType": "repo-ai-public-metadata-ci",
+  "repoName": "statistic_engine_dashboard_demo",
+  "publishPrefix": "repos/statistic_engine_dashboard_demo/",
+  "identity": {
+    "id": "a73a6639-2fd9-4667-b138-322d84b29f2b",
+    "title": "statistic_engine_dashboard_demo",
+    "owner": "ToviasNunez",
+    "name": "statistic_engine_dashboard_demo",
+    "remote": "https://github.com/ToviasNunez/statistic_engine_dashboard_demo.git",
+    "recognitionSource": "repo-local",
+    "valid": true
+  },
+  "summary": {
+    "path": "docs/PUBLIC_SAFE_SUMMARY.json",
+    "exists": true,
+    "sha256": "520ecf44eccaae4c67da13c842e6069b0aaacc189b7401789e9cc3d90a375834",
+    "publicSafeApproved": true,
+    "summaryValid": true,
+    "semanticQuality": {
+      "score": 100,
+      "threshold": 70,
+      "passed": true,
+      "checks": [
+        {
+          "id": "project.description-non-empty",
+          "passed": true,
+          "weight": 12,
+          "failureMessage": "semantic-quality:project.description-too-short"
+        },
+        {
+          "id": "project.year-format",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:project.year-invalid"
+        },
+        {
+          "id": "dashboard.href-populated",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:dashboard.href-missing"
+        },
+        {
+          "id": "dashboard.required-blocks-semantic",
+          "passed": true,
+          "weight": 24,
+          "failureMessage": "semantic-quality:dashboard.blocks-not-semantic"
+        },
+        {
+          "id": "narrative.core-fields",
+          "passed": true,
+          "weight": 20,
+          "failureMessage": "semantic-quality:narrative-core-not-semantic"
+        },
+        {
+          "id": "narrative.list-density",
+          "passed": true,
+          "weight": 10,
+          "failureMessage": "semantic-quality:narrative-lists-too-thin"
+        },
+        {
+          "id": "product-signal-coverage",
+          "passed": true,
+          "weight": 12,
+          "failureMessage": "semantic-quality:product-signal-coverage-insufficient"
+        },
+        {
+          "id": "runtime-architecture-coverage",
+          "passed": true,
+          "weight": 10,
+          "failureMessage": "semantic-quality:runtime-architecture-coverage-insufficient"
+        },
+        {
+          "id": "classification-signal-coherence",
+          "passed": true,
+          "weight": 12,
+          "failureMessage": "semantic-quality:classification-signal-coherence-insufficient"
+        },
+        {
+          "id": "continuity-evolution-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:continuity-evolution-not-ready"
+        },
+        {
+          "id": "timeline-intelligence-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:timeline-intelligence-not-ready"
+        },
+        {
+          "id": "topology-intelligence-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:topology-intelligence-not-ready"
+        },
+        {
+          "id": "ecosystem-intelligence-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:ecosystem-intelligence-not-ready"
+        },
+        {
+          "id": "architecture-graph-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:architecture-graph-not-ready"
+        },
+        {
+          "id": "visualization-contract-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:visualization-contract-not-ready"
+        },
+        {
+          "id": "longitudinal-intelligence-readiness",
+          "passed": true,
+          "weight": 6,
+          "failureMessage": "semantic-quality:longitudinal-intelligence-not-ready"
+        },
+        {
+          "id": "organizational-intelligence-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:organizational-intelligence-not-ready"
+        },
+        {
+          "id": "confidence-model-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:confidence-model-not-ready"
+        },
+        {
+          "id": "project-cognition-readiness",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:project-cognition-not-ready"
+        },
+        {
+          "id": "frontend-usefulness-score",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:frontend-usefulness-insufficient"
+        },
+        {
+          "id": "governance-overweight-penalty",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:governance-overweight-detected"
+        },
+        {
+          "id": "placeholder-and-generic-phrase-penalty",
+          "passed": true,
+          "weight": 6,
+          "failureMessage": "semantic-quality:generic-phrase-detected"
+        },
+        {
+          "id": "innovation-points-evidence-bounded",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:innovation-points-unsupported"
+        },
+        {
+          "id": "no-private-path-leakage",
+          "passed": true,
+          "weight": 10,
+          "failureMessage": "semantic-quality:private-path-leak-detected"
+        },
+        {
+          "id": "no-placeholders",
+          "passed": true,
+          "weight": 8,
+          "failureMessage": "semantic-quality:placeholder-detected"
+        }
+      ],
+      "failures": []
+    }
+  },
+  "plan": {
+    "eligible": true,
+    "blockedReasons": [],
+    "warnings": [],
+    "artifacts": [
+      {
+        "sourcePath": "docs/PUBLIC_SAFE_SUMMARY.json",
+        "targetKey": "repos/statistic_engine_dashboard_demo/PUBLIC_SAFE_SUMMARY.json",
+        "required": true,
+        "exists": true,
+        "publishable": true
+      },
+      {
+        "sourcePath": "docs/architecture/c4/rendered/render-manifest.json",
+        "targetKey": "repos/statistic_engine_dashboard_demo/architecture/c4/rendered/render-manifest.json",
+        "required": false,
+        "exists": true,
+        "publishable": true
+      },
+      {
+        "sourcePath": "docs/architecture/c4/rendered/c1-system-context.svg",
+        "targetKey": "repos/statistic_engine_dashboard_demo/architecture/c4/rendered/c1-system-context.svg",
+        "required": false,
+        "exists": false,
+        "publishable": false
+      },
+      {
+        "sourcePath": "docs/architecture/c4/rendered/c2-container.svg",
+        "targetKey": "repos/statistic_engine_dashboard_demo/architecture/c4/rendered/c2-container.svg",
+        "required": false,
+        "exists": false,
+        "publishable": false
+      },
+      {
+        "sourcePath": "docs/architecture/c4/rendered/c3-component.svg",
+        "targetKey": "repos/statistic_engine_dashboard_demo/architecture/c4/rendered/c3-component.svg",
+        "required": false,
+        "exists": false,
+        "publishable": false
+      }
+    ],
+    "requiredSecrets": [
+      "CLOUDFLARE_API_TOKEN",
+      "CLOUDFLARE_ACCOUNT_ID",
+      "R2_BUCKET_NAME"
+    ],
+    "optionalSecrets": [
+      "R2_PUBLIC_BASE_URL"
+    ],
+    "renderManifestPresent": true,
+    "renderManifestValid": true
+  },
+  "publicationManifest": {
+    "schemaVersion": "1.0.0",
+    "manifestType": "public-metadata-publication",
+    "repoName": "statistic_engine_dashboard_demo",
+    "publishPrefix": "repos/statistic_engine_dashboard_demo/",
+    "eligible": true,
+    "publicSafeApproved": true,
+    "summaryValid": true,
+    "renderManifestPresent": true,
+    "renderManifestValid": true,
+    "semanticQuality": {
+      "score": 100,
+      "threshold": 70,
+      "passed": true
+    },
+    "artifactCount": 2,
+    "artifacts": [
+      {
+        "sourcePath": "docs/architecture/c4/rendered/render-manifest.json",
+        "targetKey": "repos/statistic_engine_dashboard_demo/architecture/c4/rendered/render-manifest.json",
+        "required": false,
+        "exists": true,
+        "contentType": "application/json",
+        "sizeBytes": 1278,
+        "sha256": "ea0351d0ff2f75cce214fefec4ea8f9bcb419595c5f66ed60edcda855b619b30"
+      },
+      {
+        "sourcePath": "docs/PUBLIC_SAFE_SUMMARY.json",
+        "targetKey": "repos/statistic_engine_dashboard_demo/PUBLIC_SAFE_SUMMARY.json",
+        "required": true,
+        "exists": true,
+        "contentType": "application/json",
+        "sizeBytes": 20596,
+        "sha256": "520ecf44eccaae4c67da13c842e6069b0aaacc189b7401789e9cc3d90a375834"
+      }
+    ],
+    "manifestHash": "45c5d541cedd1248d829cb5a985f4f3e0f777a78d386c76904f43e7c992e3f4c"
+  }
+}

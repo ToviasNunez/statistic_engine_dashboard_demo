@@ -1,0 +1,645 @@
+{
+  "schemaVersion": "1.0.0",
+  "project": {
+    "id": "statisticenginedashboarddemo",
+    "slug": "statisticenginedashboarddemo",
+    "title": "statistic_engine_dashboard_demo",
+    "description": "Interactive dashboard for hybrid data simulation (AWS, On-Prem, Hybrid, Databricks).",
+    "status": "draft",
+    "year": "2026",
+    "featured": false,
+    "completionPercent": 35
+  },
+  "timeline": {
+    "lastUpdatedAt": "2026-06-01T12:15:17.874Z",
+    "lastReviewedAt": "",
+    "publishedAt": ""
+  },
+  "governance": {
+    "publicSafeApproved": true,
+    "sourceConfidence": "high",
+    "reviewStatus": "approved",
+    "sourceOfTruth": {
+      "primary": "docs/ARCHITECTURE.md",
+      "secondary": [
+        "README.md",
+        "docs/PROJECT_OVERVIEW.md",
+        "docs/ARCHITECTURE.md",
+        "docs/PROJECT_STATUS.md",
+        "docs/WORK_LOG.md",
+        "docs/DECISIONS.md"
+      ]
+    },
+    "approvedAt": "2026-06-01T12:16:31.092Z",
+    "approvedBy": "repository-owner",
+    "approvalEvidence": {
+      "source": "repo-ai-cli",
+      "command": "repo-ai public-metadata approve",
+      "approvedAt": "2026-06-01T12:16:31.092Z",
+      "approvedBy": "repository-owner"
+    }
+  },
+  "dashboard": {
+    "href": "/projects/statisticenginedashboarddemo",
+    "previewLabel": "statistic_engine_dashboard_demo public-safe summary",
+    "actionLabel": "View Project",
+    "visualVariant": "default",
+    "cardSize": "medium",
+    "tags": [
+      "vite",
+      "filesystem-persistence",
+      "s3-r2-object-storage",
+      "docker",
+      "github-actions",
+      "javascript",
+      "c4-architecture",
+      "architecture-decisions"
+    ],
+    "blocks": [
+      {
+        "key": "tech",
+        "title": "Technology",
+        "summary": "Detected technology stack across languages, runtime frameworks, storage, messaging, and deployment signals.",
+        "items": [
+          "JavaScript",
+          "Vite",
+          "Filesystem persistence",
+          "S3/R2 object storage",
+          "Docker",
+          "GitHub Actions",
+          "C4 architecture",
+          "Architecture decisions",
+          "Boundary modeling"
+        ]
+      },
+      {
+        "key": "capabilities",
+        "title": "Capabilities",
+        "summary": "Primary product and operational capabilities derived from repository evidence.",
+        "items": [
+          "User-facing interface delivery with reusable frontend surfaces",
+          "Health and runtime diagnostics surfaces",
+          "Deterministic export and reporting pipeline",
+          "Governed public-safe metadata planning and publication controls",
+          "Architecture documentation and boundary modeling"
+        ]
+      },
+      {
+        "key": "architecture",
+        "title": "Architecture",
+        "summary": "Architecture shape inferred from runtime, storage, interface, pipeline, and governance boundaries.",
+        "items": [
+          "UI composition layer provides user-facing workflows, navigational structure, and stateful interaction surfaces",
+          "Persistence layer stores telemetry, artifacts, or workflow state used for reporting",
+          "API/UI interface layer exposes operational views, endpoints, and user-facing status surfaces",
+          "Governance and CI/CD controls gate publication and maintain auditable delivery boundaries"
+        ]
+      },
+      {
+        "key": "impact",
+        "title": "Impact",
+        "summary": "Quality and delivery signals that indicate operational reliability.",
+        "items": [
+          "1 workflow(s) use explicit manual triggers for controlled execution",
+          "Data handoff boundaries support integration-ready operational reporting",
+          "Governed publication flow preserves public-safe quality constraints with human approval gates",
+          "Documentation output is constrained to repository evidence and explicit schema checks"
+        ]
+      }
+    ]
+  },
+  "classification": {
+    "domain": "frontend-experience",
+    "category": "ui-application-platform",
+    "complexity": "high",
+    "scope": "frontend-runtime-and-delivery"
+  },
+  "engineering": {
+    "focusAreas": [
+      "react",
+      "static dashboard ui",
+      "logs",
+      "health endpoints",
+      "export pipeline",
+      "repo-ai governance"
+    ],
+    "systemCharacteristics": [
+      "evidence-bounded",
+      "manual-approval-required",
+      "manual-triggered-publish",
+      "architecture-documented"
+    ]
+  },
+  "continuity": {
+    "status": "evolving",
+    "evidenceWindow": {
+      "detectedSignals": 17,
+      "filesScanned": 99,
+      "snippetsUsed": 6
+    },
+    "documentation": {
+      "trackedDocs": [
+        "docs/ARCHITECTURE.md",
+        "docs/PROJECT_STATUS.md",
+        "docs/WORK_LOG.md",
+        "docs/DECISIONS.md"
+      ],
+      "availableDocs": [
+        "docs/ARCHITECTURE.md",
+        "docs/PROJECT_STATUS.md",
+        "docs/WORK_LOG.md",
+        "docs/DECISIONS.md"
+      ],
+      "coveragePercent": 100
+    },
+    "evolution": {
+      "changedSinceLastSummary": true,
+      "changeCount": 3,
+      "changedFields": [
+        "engineering.focusAreas",
+        "dashboard.tags",
+        "dashboard.capabilities.items"
+      ],
+      "previousLastUpdatedAt": "2026-06-01T12:14:41.226Z",
+      "detectedAt": "2026-06-01T12:15:17.874Z"
+    },
+    "driftIndicators": {
+      "missingCoreDocs": [],
+      "timelineOutOfDate": false
+    }
+  },
+  "timelineIntelligence": {
+    "status": "evolving",
+    "milestones": [
+      {
+        "id": "governance-maturity-governance-maturity-increased",
+        "type": "governance-maturity",
+        "title": "Governance maturity increased",
+        "impactArea": "governance",
+        "significanceScore": 76,
+        "confidence": 0.74,
+        "evidenceRefs": [
+          "docs/PROJECT_STATUS.md",
+          "docs/DECISIONS.md"
+        ],
+        "whyItMatters": "Improved governance maturity lowers publication and operational risk over time.",
+        "firstDetectedAt": "2026-06-01T12:14:41.226Z",
+        "lastConfirmedAt": "2026-06-01T12:15:17.874Z",
+        "status": "active"
+      },
+      {
+        "id": "automation-expansion-automation-capability-expanded",
+        "type": "automation-expansion",
+        "title": "Automation capability expanded",
+        "impactArea": "automation",
+        "significanceScore": 73,
+        "confidence": 0.72,
+        "evidenceRefs": [
+          ".github/workflows/publish-public-metadata.yml"
+        ],
+        "whyItMatters": "Automation evolution improves repeatability and lowers manual delivery overhead.",
+        "firstDetectedAt": "2026-06-01T12:15:17.874Z",
+        "lastConfirmedAt": "2026-06-01T12:15:17.874Z",
+        "status": "active"
+      },
+      {
+        "id": "operations-observability-operational-observability-maturity-increased",
+        "type": "operations-observability",
+        "title": "Operational observability maturity increased",
+        "impactArea": "operations",
+        "significanceScore": 78,
+        "confidence": 0.76,
+        "evidenceRefs": [
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/WORK_LOG.md"
+        ],
+        "whyItMatters": "Higher operational maturity improves reliability diagnostics and incident response context.",
+        "firstDetectedAt": "2026-06-01T12:14:41.226Z",
+        "lastConfirmedAt": "2026-06-01T12:15:17.874Z",
+        "status": "active"
+      }
+    ],
+    "maturity": {
+      "overallScore": 64,
+      "overallLevel": "developing",
+      "overallDirection": "improving",
+      "dimensions": {
+        "governance": {
+          "score": 82,
+          "level": "strong",
+          "direction": "improving",
+          "drivers": [
+            "governance-signals-detected",
+            "manual-publication-control",
+            "continuity-doc-coverage"
+          ]
+        },
+        "architecture": {
+          "score": 58,
+          "level": "developing",
+          "direction": "improving",
+          "drivers": [
+            "architecture-signals-detected",
+            "data-pipeline-boundaries-detected"
+          ]
+        },
+        "operations": {
+          "score": 37,
+          "level": "emerging",
+          "direction": "improving",
+          "drivers": [
+            "observability-surface-detected",
+            "operational-api-surface-detected"
+          ]
+        },
+        "automation": {
+          "score": 51,
+          "level": "emerging",
+          "direction": "improving",
+          "drivers": [
+            "workflow-orchestration-detected",
+            "deployment-signals-detected",
+            "ci-boundary-detected"
+          ]
+        },
+        "documentation": {
+          "score": 90,
+          "level": "advanced",
+          "direction": "improving",
+          "drivers": [
+            "governed-doc-snippets-detected",
+            "core-continuity-doc-coverage"
+          ]
+        },
+        "continuity": {
+          "score": 75,
+          "level": "strong",
+          "direction": "improving",
+          "drivers": [
+            "continuity-coverage-stable",
+            "semantic-diffing-active"
+          ]
+        },
+        "publicationReadiness": {
+          "score": 52,
+          "level": "emerging",
+          "direction": "improving",
+          "drivers": [
+            "approval-pending",
+            "manual-gate-workflow-present"
+          ]
+        }
+      }
+    },
+    "phaseProgression": {
+      "currentPhase": "structured-foundation",
+      "transitionSignals": [
+        "Governance maturity increased",
+        "Automation capability expanded",
+        "Operational observability maturity increased"
+      ],
+      "progressionConfidence": 0.58
+    },
+    "highSignalFiltering": {
+      "candidateCount": 3,
+      "acceptedCount": 3,
+      "suppressedCount": 0,
+      "suppressionReasons": []
+    },
+    "analysisWindow": {
+      "evaluatedAt": "2026-06-01T12:15:17.874Z",
+      "comparedToSummaryAt": "2026-06-01T12:14:41.226Z"
+    }
+  },
+  "topologyIntelligence": {
+    "status": "mapped",
+    "components": [
+      {
+        "id": "frontend-ui",
+        "type": "service",
+        "label": "Frontend UI",
+        "role": "ingress-interface",
+        "evidenceRefs": [
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/ARCHITECTURE.md",
+          "docs/PROJECT_STATUS.md",
+          "docs/WORK_LOG.md",
+          "docs/DECISIONS.md"
+        ]
+      },
+      {
+        "id": "api-service",
+        "type": "service",
+        "label": "API Service",
+        "role": "runtime-orchestrator",
+        "evidenceRefs": [
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/ARCHITECTURE.md",
+          "docs/PROJECT_STATUS.md",
+          "docs/WORK_LOG.md",
+          "docs/DECISIONS.md"
+        ]
+      },
+      {
+        "id": "processing-worker",
+        "type": "worker",
+        "label": "Processing Worker",
+        "role": "pipeline-processor",
+        "evidenceRefs": [
+          "docs/ARCHITECTURE.md",
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/PROJECT_STATUS.md",
+          "docs/WORK_LOG.md",
+          "docs/DECISIONS.md"
+        ]
+      },
+      {
+        "id": "object-storage",
+        "type": "storage",
+        "label": "Object Storage",
+        "role": "artifact-and-export-store",
+        "evidenceRefs": [
+          "docs/ARCHITECTURE.md",
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/PROJECT_STATUS.md",
+          "docs/WORK_LOG.md",
+          "docs/DECISIONS.md"
+        ]
+      },
+      {
+        "id": "observability-stack",
+        "type": "observability",
+        "label": "Observability Stack",
+        "role": "monitoring-and-incident-visibility",
+        "evidenceRefs": [
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/WORK_LOG.md",
+          "README.md",
+          "docs/ARCHITECTURE.md",
+          "docs/PROJECT_STATUS.md",
+          "docs/DECISIONS.md"
+        ]
+      },
+      {
+        "id": "deployment-control",
+        "type": "deployment",
+        "label": "Deployment Control",
+        "role": "execution-and-orchestration-control",
+        "evidenceRefs": [
+          ".github/workflows/publish-public-metadata.yml"
+        ]
+      },
+      {
+        "id": "governance-gate",
+        "type": "governance",
+        "label": "Governance Gate",
+        "role": "policy-and-approval-boundary",
+        "evidenceRefs": [
+          "docs/PROJECT_STATUS.md",
+          "docs/DECISIONS.md",
+          "README.md",
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/ARCHITECTURE.md",
+          "docs/WORK_LOG.md"
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "id": "frontend-to-api",
+        "source": "frontend-ui",
+        "target": "api-service",
+        "relationshipType": "consumer-provider",
+        "transport": "http",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "README.md",
+          "docs/ARCHITECTURE.md"
+        ]
+      },
+      {
+        "id": "api-to-storage",
+        "source": "api-service",
+        "target": "object-storage",
+        "relationshipType": "export-dependency",
+        "transport": "object-storage-api",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "docs/ARCHITECTURE.md",
+          "docs/PROJECT_OVERVIEW.md"
+        ]
+      },
+      {
+        "id": "worker-to-storage",
+        "source": "processing-worker",
+        "target": "object-storage",
+        "relationshipType": "processing-output",
+        "transport": "object-storage-api",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "docs/ARCHITECTURE.md"
+        ]
+      },
+      {
+        "id": "runtime-to-observability-api",
+        "source": "api-service",
+        "target": "observability-stack",
+        "relationshipType": "telemetry-emission",
+        "transport": "metrics-logs",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/WORK_LOG.md"
+        ]
+      },
+      {
+        "id": "runtime-to-observability-worker",
+        "source": "processing-worker",
+        "target": "observability-stack",
+        "relationshipType": "telemetry-emission",
+        "transport": "metrics-logs",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/WORK_LOG.md"
+        ]
+      },
+      {
+        "id": "deployment-to-runtime-api",
+        "source": "deployment-control",
+        "target": "api-service",
+        "relationshipType": "orchestration-dependency",
+        "transport": "workflow-runner",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          ".github/workflows/publish-public-metadata.yml"
+        ]
+      },
+      {
+        "id": "deployment-to-runtime-worker",
+        "source": "deployment-control",
+        "target": "processing-worker",
+        "relationshipType": "orchestration-dependency",
+        "transport": "workflow-runner",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          ".github/workflows/publish-public-metadata.yml"
+        ]
+      },
+      {
+        "id": "governance-to-deployment",
+        "source": "governance-gate",
+        "target": "deployment-control",
+        "relationshipType": "policy-gate",
+        "transport": "governance-policy",
+        "direction": "unidirectional",
+        "evidenceRefs": [
+          "docs/PROJECT_STATUS.md",
+          "docs/DECISIONS.md"
+        ]
+      }
+    ],
+    "dataFlows": [
+      {
+        "id": "ingestion-api",
+        "flowType": "ingestion",
+        "summary": "Ingress requests are received through the API service and converted into persisted system state.",
+        "source": "frontend-ui",
+        "target": "api-service",
+        "evidenceRefs": [
+          "README.md",
+          "docs/ARCHITECTURE.md"
+        ]
+      },
+      {
+        "id": "export-flow",
+        "flowType": "export",
+        "summary": "Processed artifacts are exported into object storage for downstream consumption.",
+        "source": "processing-worker",
+        "target": "object-storage",
+        "evidenceRefs": [
+          "docs/ARCHITECTURE.md",
+          "docs/PROJECT_OVERVIEW.md"
+        ]
+      },
+      {
+        "id": "telemetry-flow",
+        "flowType": "observability",
+        "summary": "Operational telemetry from runtime components is emitted to the observability stack.",
+        "source": "api-service",
+        "target": "observability-stack",
+        "evidenceRefs": [
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/WORK_LOG.md"
+        ]
+      },
+      {
+        "id": "publication-gate-flow",
+        "flowType": "publication",
+        "summary": "Governance controls gate deployment and publication orchestration paths.",
+        "source": "governance-gate",
+        "target": "deployment-control",
+        "evidenceRefs": [
+          "docs/PROJECT_STATUS.md",
+          "docs/DECISIONS.md"
+        ]
+      }
+    ],
+    "boundaries": {
+      "runtime": [
+        "runtime-service-boundary",
+        "asynchronous-processing-boundary"
+      ],
+      "infrastructure": [
+        "artifact-storage-boundary"
+      ],
+      "deployment": [
+        "orchestration-execution-boundary"
+      ],
+      "governance": [
+        "policy-enforcement-boundary",
+        "human-approval-publication-boundary"
+      ],
+      "ownership": [
+        "operator-governance-ownership-boundary"
+      ]
+    },
+    "operationalDependencies": [
+      "frontend-ui->api-service:consumer-provider",
+      "api-service->object-storage:export-dependency",
+      "processing-worker->object-storage:processing-output",
+      "api-service->observability-stack:telemetry-emission",
+      "processing-worker->observability-stack:telemetry-emission",
+      "deployment-control->api-service:orchestration-dependency",
+      "deployment-control->processing-worker:orchestration-dependency",
+      "governance-gate->deployment-control:policy-gate"
+    ],
+    "ingressEgress": {
+      "ingressPaths": [
+        "frontend-http-ingress"
+      ],
+      "egressPaths": [
+        "artifact-export-egress",
+        "telemetry-egress"
+      ]
+    },
+    "graphMetrics": {
+      "componentCount": 7,
+      "relationshipCount": 8,
+      "dataFlowCount": 4,
+      "dependencyDensity": 1.14,
+      "inferredConfidence": 0.84
+    }
+  },
+  "architecture": {
+    "c4": {
+      "workspace": "docs/architecture/c4/workspace.dsl",
+      "c1SystemContext": "docs/architecture/c4/c1-system-context.dsl",
+      "c2Container": "docs/architecture/c4/c2-container.dsl",
+      "c3Component": "docs/architecture/c4/c3-component.dsl",
+      "renderStatus": "unavailable",
+      "available": {
+        "workspace": false,
+        "c1SystemContext": false,
+        "c2Container": false,
+        "c3Component": false
+      }
+    }
+  },
+  "narrative": {
+    "headline": "statistic_engine_dashboard_demo: frontend product surface with governed delivery context",
+    "elevatorPitch": "statistic_engine_dashboard_demo provides a UI-centric application surface with runtime and delivery signals that support portfolio presentation and maintainability analysis.",
+    "executiveSummary": "statistic_engine_dashboard_demo is summarized from frontend-focused evidence including UI runtime choices, delivery workflows, and supporting architecture boundaries. The output prioritizes usability, implementation transparency, and public-safe metadata governance.",
+    "differentiators": [
+      "Interface-focused semantic extraction ties UI stack signals to concrete product capabilities",
+      "Architecture summaries preserve frontend concerns such as composition, routing, and delivery workflows",
+      "Public-safe publication remains governed without suppressing product-facing context"
+    ],
+    "innovationPoints": [
+      "Signal quality checks penalize generic summaries when UI evidence indicates richer product identity",
+      "Evidence-bounded enrichment rejects unsupported marketing claims while preserving useful differentiation"
+    ],
+    "professionalHighlights": [
+      "Portfolio-oriented summaries communicate frontend implementation depth for hiring and showcase use-cases",
+      "Structured metadata remains machine-consumable for project discovery and filtering"
+    ]
+  },
+  "references": {
+    "metadata": ".repo-ai.json",
+    "markdown": "docs/PUBLIC_SAFE_SUMMARY.md",
+    "json": "docs/PUBLIC_SAFE_SUMMARY.json",
+    "semanticEvidence": [
+      "README.md",
+      "docs/PROJECT_OVERVIEW.md",
+      "docs/ARCHITECTURE.md",
+      "docs/PROJECT_STATUS.md",
+      "docs/WORK_LOG.md",
+      "docs/DECISIONS.md"
+    ]
+  }
+}

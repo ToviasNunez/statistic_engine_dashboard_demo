@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "reviewType": "c4-review",
+  "targetProposal": "docs/architecture/c4/proposals/c4-proposal.json",
+  "reviewedAt": "",
+  "reviewedBy": "",
+  "status": "pending",
+  "approvedChanges": [],
+  "rejectedChanges": [],
+  "reviewNotes": [],
+  "governance": {
+    "partialApplyAllowed": true,
+    "fullAutoApplyAllowed": false,
+    "requiresExplicitApproval": true,
+    "directDslWriteAllowed": false,
+    "diagramRenderingAllowed": false
+  }
+}

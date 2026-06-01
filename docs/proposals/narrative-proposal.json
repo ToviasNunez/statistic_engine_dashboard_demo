@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "proposalType": "narrative",
+  "generatedAt": "",
+  "generatedBy": "repo-ai",
+  "sourceConfidence": "low",
+  "targetFile": "docs/PUBLIC_SAFE_SUMMARY.json",
+  "status": "proposal-only",
+  "evidenceSources": [],
+  "proposedNarrative": {
+    "headline": "",
+    "elevatorPitch": "",
+    "executiveSummary": "",
+    "differentiators": [],
+    "innovationPoints": [],
+    "professionalHighlights": []
+  },
+  "governance": {
+    "autoApplyAllowed": false,
+    "requiresReview": true,
+    "publicSafeApproved": false
+  }
+}

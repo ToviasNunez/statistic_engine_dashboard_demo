@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "proposalType": "c4-architecture",
+  "generatedAt": "20260601141441",
+  "generatedBy": "repo-ai",
+  "status": "proposal-only",
+  "sourceConfidence": "low",
+  "targetFiles": [
+    "docs/architecture/c4/workspace.dsl",
+    "docs/architecture/c4/c1-system-context.dsl",
+    "docs/architecture/c4/c2-container.dsl",
+    "docs/architecture/c4/c3-component.dsl"
+  ],
+  "evidenceSources": [
+    "README.md",
+    "docs/PUBLIC_SAFE_SUMMARY.json",
+    "docs/PUBLIC_SAFE_SUMMARY.md"
+  ],
+  "proposedChanges": [],
+  "governance": {
+    "autoApplyAllowed": false,
+    "requiresReview": true,
+    "directDslWriteAllowed": false,
+    "diagramRenderingRequested": false
+  }
+}

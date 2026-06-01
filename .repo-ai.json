@@ -1,0 +1,78 @@
+{
+  "templateVersion": "1.2.0",
+  "profile": "enterprise-default",
+  "pathRules": true,
+  "repositoryIdentity": {
+    "id": "a73a6639-2fd9-4667-b138-322d84b29f2b",
+    "title": "statistic_engine_dashboard_demo",
+    "owner": "ToviasNunez",
+    "name": "statistic_engine_dashboard_demo",
+    "remote": "https://github.com/ToviasNunez/statistic_engine_dashboard_demo.git",
+    "recognizedByParent": true,
+    "recognitionSource": "repo-local",
+    "recognizedAt": "2026-06-01T12:16:04.230Z",
+    "recognition": "parent-registry"
+  },
+  "projectMetadata": {
+    "schemaVersion": "1.0.0",
+    "identity": {
+      "status": "",
+      "year": "",
+      "featured": false,
+      "title": ""
+    },
+    "classification": {
+      "domain": "",
+      "category": "",
+      "complexity": "",
+      "scope": ""
+    },
+    "presentation": {
+      "href": "",
+      "previewLabel": "",
+      "actionLabel": "View Project",
+      "visualVariant": "default",
+      "cardSize": "medium"
+    },
+    "content": {
+      "description": "",
+      "tags": [],
+      "engineeringFocus": [],
+      "systemCharacteristics": [],
+      "blocks": []
+    },
+    "publicSafe": {
+      "approved": false,
+      "export": {
+        "markdownPath": "docs/PUBLIC_SAFE_SUMMARY.md",
+        "jsonPath": "docs/PUBLIC_SAFE_SUMMARY.json"
+      }
+    },
+    "provenance": {
+      "sourceOfTruth": {
+        "primary": "docs/ARCHITECTURE.md",
+        "secondary": [
+          "docs/PROJECT_OVERVIEW.md",
+          "docs/SETUP.md",
+          "README.md"
+        ]
+      },
+      "sourceConfidence": "low"
+    },
+    "maintenance": {
+      "lastUpdatedAt": "",
+      "lastUpdatedBy": "",
+      "reviewStatus": "needs-review"
+    },
+    "defaults": {
+      "emptyString": "Field not yet documented",
+      "emptyArray": "No documented evidence or not applicable",
+      "false": "Disabled or not approved by default",
+      "sourceConfidence": {
+        "low": "Limited or partial documentation evidence",
+        "medium": "Consistent documentation across multiple sources",
+        "high": "Strong, validated and reviewed documentation"
+      }
+    }
+  }
+}

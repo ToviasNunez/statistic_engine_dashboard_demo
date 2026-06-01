@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "reviewType": "narrative-review",
+  "targetProposal": "docs/proposals/narrative-proposal.json",
+  "targetMetadata": "docs/PUBLIC_SAFE_SUMMARY.json",
+  "reviewedAt": "",
+  "reviewedBy": "",
+  "status": "pending",
+  "approvedFields": {
+    "headline": false,
+    "elevatorPitch": false,
+    "executiveSummary": false,
+    "differentiators": false,
+    "innovationPoints": false,
+    "professionalHighlights": false
+  },
+  "reviewNotes": [],
+  "governance": {
+    "partialApplyAllowed": true,
+    "fullAutoApplyAllowed": false,
+    "requiresExplicitApproval": true
+  }
+}

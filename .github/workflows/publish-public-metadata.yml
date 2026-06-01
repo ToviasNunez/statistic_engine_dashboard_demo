@@ -1,0 +1,300 @@
+name: Publish Public Metadata
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      MANAGED_REPOSITORY: ${{ github.repository }}
+      MANAGED_REPOSITORY_OWNER: ${{ github.repository_owner }}
+      MANAGED_REPOSITORY_NAME: ${{ github.event.repository.name }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate public metadata contract
+        shell: bash
+        run: |
+          set -uo pipefail
+          node .repo-ai/ci/validate-public-metadata.js --json > validate-result.json || true
+
+      - name: Assert validation gate
+        shell: bash
+        run: |
+          node - <<'JSEOF'
+          const fs = require("fs");
+
+          let raw;
+          try {
+            raw = fs.readFileSync("validate-result.json", "utf8");
+          } catch (e) {
+            console.error("FATAL: Cannot read validate-result.json:", e.message);
+            process.exit(1);
+          }
+
+          // Robust extraction: walk characters to find the first complete balanced JSON object.
+          // This handles files where the CLI emits extra text after the closing brace.
+          const start = raw.indexOf("{");
+          if (start === -1) {
+            console.error("FATAL: No JSON object found in validate-result.json");
+            process.exit(1);
+          }
+
+          let depth = 0;
+          let inString = false;
+          let escape = false;
+          let end = -1;
+
+          for (let i = start; i < raw.length; i++) {
+            const ch = raw[i];
+            if (escape) { escape = false; continue; }
+            if (inString) {
+              if (ch === "\\") { escape = true; continue; }
+              if (ch === '"') { inString = false; }
+              continue;
+            }
+            if (ch === '"') { inString = true; continue; }
+            if (ch === "{") { depth++; continue; }
+            if (ch === "}") {
+              depth--;
+              if (depth === 0) { end = i; break; }
+            }
+          }
+
+          if (end === -1) {
+            console.error("FATAL: Unbalanced braces in validate-result.json — cannot extract JSON object");
+            process.exit(1);
+          }
+
+          let r;
+          try {
+            r = JSON.parse(raw.slice(start, end + 1));
+          } catch (e) {
+            console.error("FATAL: JSON parse failed:", e.message);
+            process.exit(1);
+          }
+
+          const errors =
+            r.summary && typeof r.summary.errors === "number"
+              ? r.summary.errors
+              : typeof r.errors === "number"
+              ? r.errors
+              : null;
+
+          const warnings =
+            r.summary && typeof r.summary.warnings === "number"
+              ? r.summary.warnings
+              : typeof r.warnings === "number"
+              ? r.warnings
+              : null;
+
+          if (errors === null) {
+            console.error("FATAL: Cannot read error count from validate-result.json");
+            process.exit(1);
+          }
+          if (warnings === null) {
+            console.error("FATAL: Cannot read warning count from validate-result.json");
+            process.exit(1);
+          }
+
+          const findings = r.findings && typeof r.findings === "object" ? r.findings : {};
+          const validationErrors = Array.isArray(findings.errors) ? findings.errors : [];
+          const validationWarnings = Array.isArray(findings.warnings) ? findings.warnings : [];
+          const recommendations = Array.isArray(r.recommendations) ? r.recommendations : [];
+
+          const printList = (heading, items, formatItem) => {
+            if (!items.length) {
+              return;
+            }
+            console.error(`${heading}:`);
+            for (const item of items) {
+              console.error(`- ${formatItem(item)}`);
+            }
+            console.error("");
+          };
+
+          const formatFinding = (item) => {
+            if (typeof item === "string") {
+              return item;
+            }
+            if (item && typeof item === "object") {
+              return item.message || item.error || item.reason || item.recommendation || JSON.stringify(item);
+            }
+            return String(item);
+          };
+
+          const formatRecommendation = (item) => {
+            if (typeof item === "string") {
+              return item;
+            }
+            if (item && typeof item === "object") {
+              const parts = [];
+              if (item.severity) parts.push(`severity: ${item.severity}`);
+              if (item.trigger) parts.push(`trigger: ${item.trigger}`);
+              if (item.recommendation) parts.push(`recommendation: ${item.recommendation}`);
+              if (item.suggestedCommand) parts.push(`suggestedCommand: ${item.suggestedCommand}`);
+              if (item.rationale) parts.push(`rationale: ${item.rationale}`);
+              return parts.length ? parts.join("; ") : JSON.stringify(item);
+            }
+            return String(item);
+          };
+
+          console.log("Validation result — errors:", errors, "warnings:", warnings);
+
+          if (errors !== 0) {
+            const details = r.details && typeof r.details === 'object' ? r.details : {};
+
+            printList("Validation errors:", validationErrors, formatFinding);
+            printList("Validation warnings:", validationWarnings, formatFinding);
+            printList("Validation recommendations:", recommendations, formatRecommendation);
+            console.error(`Contract path: ${details.contractPath || 'unknown'}`);
+            console.error(`Summary path: ${details.summaryPath || 'unknown'}`);
+            console.error(`Summary sha256: ${details.summarySha256 || 'unknown'}`);
+            console.error(`Validation summary: errors: ${errors} warnings: ${warnings}`);
+            console.error(`FATAL: Validation failed — errors: ${errors} warnings: ${warnings}`);
+            process.exit(1);
+          }
+
+          console.log("Validation passed.");
+          JSEOF
+
+      - name: Validate public metadata publish plan
+        run: node .repo-ai/ci/plan-public-metadata.js --assert-eligible --json
+
+      - name: Stage public artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${MANAGED_REPOSITORY_NAME:-${MANAGED_REPOSITORY##*/}}"
+          STAGING_DIR="$(mktemp -d)"
+          DEST_ROOT="$STAGING_DIR/repos/$REPO_NAME"
+          mkdir -p "$DEST_ROOT"
+
+          copy_artifact() {
+            local source_path="$1"
+            local destination_path="$2"
+            if [[ -f "$source_path" ]]; then
+              mkdir -p "$(dirname "$DEST_ROOT/$destination_path")"
+              cp "$source_path" "$DEST_ROOT/$destination_path"
+            fi
+          }
+
+          copy_artifact docs/PUBLIC_SAFE_SUMMARY.json PUBLIC_SAFE_SUMMARY.json
+
+          if [[ -f docs/architecture/c4/rendered/render-manifest.json ]]; then
+            copy_artifact docs/architecture/c4/rendered/render-manifest.json architecture/c4/rendered/render-manifest.json
+            copy_artifact docs/architecture/c4/rendered/c1-system-context.svg architecture/c4/rendered/c1-system-context.svg
+            copy_artifact docs/architecture/c4/rendered/c2-container.svg architecture/c4/rendered/c2-container.svg
+            copy_artifact docs/architecture/c4/rendered/c3-component.svg architecture/c4/rendered/c3-component.svg
+          else
+            echo "C4 rendered assets not found; metadata-only publish."
+          fi
+
+          for secret_name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID R2_BUCKET_NAME; do
+            if [[ -z "${!secret_name:-}" ]]; then
+              echo "Missing required secret: ${secret_name}" >&2
+              exit 1
+            fi
+          done
+
+          echo "STAGING_DIR=$STAGING_DIR" >> "$GITHUB_ENV"
+          echo "Staged object keys:"
+          find "$STAGING_DIR" -type f | sort | sed "s|^$STAGING_DIR/|  - |"
+
+      - name: Resolve publication diff
+        id: publication_diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${MANAGED_REPOSITORY_NAME:-${MANAGED_REPOSITORY##*/}}"
+          MANIFEST_KEY="repos/${REPO_NAME}/publication-manifest.json"
+          PREVIOUS_MANIFEST_PATH="$STAGING_DIR/previous-publication-manifest.json"
+          CURRENT_MANIFEST_PATH="$STAGING_DIR/current-publication-manifest.json"
+          DIFF_PATH="$STAGING_DIR/publication-diff.json"
+
+          npx --yes wrangler@3 r2 object get "${R2_BUCKET_NAME}/${MANIFEST_KEY}" --file "$PREVIOUS_MANIFEST_PATH" >/dev/null 2>&1 || true
+
+          REPO_NAME="$REPO_NAME" \
+          PREVIOUS_MANIFEST_PATH="$PREVIOUS_MANIFEST_PATH" \
+          CURRENT_MANIFEST_PATH="$CURRENT_MANIFEST_PATH" \
+          DIFF_PATH="$DIFF_PATH" \
+          GITHUB_OUTPUT="$GITHUB_OUTPUT" \
+          node .repo-ai/ci/resolve-publication-diff.js
+
+      - name: Stop when artifacts unchanged
+        if: steps.publication_diff.outputs.should_publish != 'true'
+        run: echo "No governed public artifact changes detected; skipping R2 upload."
+
+      - name: Upload staged objects
+        if: steps.publication_diff.outputs.should_publish == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${MANAGED_REPOSITORY_NAME:-${MANAGED_REPOSITORY##*/}}"
+          R2_OBJECT_PREFIX="repos/${REPO_NAME}"
+          DIFF_PATH="$STAGING_DIR/publication-diff.json"
+          CURRENT_MANIFEST_PATH="$STAGING_DIR/current-publication-manifest.json"
+          export DIFF_PATH
+          export CURRENT_MANIFEST_PATH
+
+          node - <<'NODE' > "$STAGING_DIR/changed-artifacts.tsv"
+          const fs = require('fs');
+          const repoName = process.env.MANAGED_REPOSITORY_NAME || String(process.env.MANAGED_REPOSITORY || '').split('/').pop();
+          const diff = JSON.parse(fs.readFileSync(process.env.DIFF_PATH, 'utf8'));
+          const manifest = JSON.parse(fs.readFileSync(process.env.CURRENT_MANIFEST_PATH, 'utf8'));
+          const changed = new Set(Array.isArray(diff.changedArtifactKeys) ? diff.changedArtifactKeys : []);
+          for (const artifact of (manifest.artifacts || [])) {
+            if (!artifact || typeof artifact !== 'object') continue;
+            if (!changed.has(String(artifact.targetKey || ''))) continue;
+            const targetKey = String(artifact.targetKey || '').trim();
+            if (!targetKey) continue;
+            const rel = targetKey.replace(`repos/${repoName}/`, '');
+            console.log(`${rel}\t${targetKey}\t${String(artifact.contentType || '').trim()}`);
+          }
+          NODE
+
+          upload_object() {
+            local source_path="$1"
+            local object_key="$2"
+            local content_type="${3:-}"
+            if [[ -z "$content_type" ]]; then
+              npx --yes wrangler@3 r2 object put "${R2_BUCKET_NAME}/${object_key}" --file "$source_path"
+            else
+              npx --yes wrangler@3 r2 object put "${R2_BUCKET_NAME}/${object_key}" --file "$source_path" --content-type "$content_type"
+            fi
+          }
+
+          while IFS=$'\t' read -r relative_path object_key content_type; do
+            [[ -z "$relative_path" ]] && continue
+            source_file="$STAGING_DIR/repos/$REPO_NAME/$relative_path"
+            if [[ ! -f "$source_file" ]]; then
+              echo "Missing staged source for changed artifact: $relative_path" >&2
+              exit 1
+            fi
+            upload_object "$source_file" "$object_key" "$content_type"
+          done < "$STAGING_DIR/changed-artifacts.tsv"
+
+          upload_object "$CURRENT_MANIFEST_PATH" "${R2_OBJECT_PREFIX}/publication-manifest.json" "application/json"
+
+      - name: Publish summary
+        if: steps.publication_diff.outputs.should_publish == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${MANAGED_REPOSITORY_NAME:-${MANAGED_REPOSITORY##*/}}"
+          echo "Published managed repository: ${MANAGED_REPOSITORY_OWNER}/${REPO_NAME}"
+          echo "Published R2 prefix: repos/${REPO_NAME}/"
+          echo "Changed artifact count: ${{ steps.publication_diff.outputs.changed_artifact_count }}"

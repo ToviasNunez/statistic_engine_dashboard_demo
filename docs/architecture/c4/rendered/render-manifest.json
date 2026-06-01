@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "renderType": "c4-render",
+  "renderedAt": "2026-06-01T12:14:43.210Z",
+  "renderedBy": "repo-ai",
+  "renderingSource": "structural-placeholder",
+  "sourceFiles": [],
+  "outputs": [
+    {
+      "level": "C1",
+      "sourceFile": "docs/architecture/c4/c1-system-context.dsl",
+      "outputFile": "docs/architecture/c4/rendered/c1-system-context.svg",
+      "status": "skipped",
+      "reason": "source DSL file not found"
+    },
+    {
+      "level": "C2",
+      "sourceFile": "docs/architecture/c4/c2-container.dsl",
+      "outputFile": "docs/architecture/c4/rendered/c2-container.svg",
+      "status": "skipped",
+      "reason": "source DSL file not found"
+    },
+    {
+      "level": "C3",
+      "sourceFile": "docs/architecture/c4/c3-component.dsl",
+      "outputFile": "docs/architecture/c4/rendered/c3-component.svg",
+      "status": "skipped",
+      "reason": "source DSL file not found"
+    }
+  ],
+  "renderer": {
+    "requested": "auto",
+    "selected": "structural-placeholder",
+    "available": [
+      "placeholder"
+    ],
+    "used": false,
+    "fallbackReason": "no-real-renderer-available"
+  },
+  "governance": {
+    "boundedRender": true,
+    "sourceDslOnly": true,
+    "aiGeneratedRender": false,
+    "externalPublish": false
+  }
+}
